@@ -1,32 +1,30 @@
-export const initialStore=()=>{
-  return{
-    message: null,
-    todos: [
-      {
-        id: 1,
-        title: "Make the bed",
-        background: null,
-      },
-      {
-        id: 2,
-        title: "Do my homework",
-        background: null,
-      }
-    ]
-  }
-}
+export const initialStore = () => {
+  return {
+    favoritos: [], // Lista de favoritos
+  };
+};
 
 export default function storeReducer(store, action = {}) {
-  switch(action.type){
-    case 'add_task':
-
-      const { id,  color } = action.payload
-
+  switch (action.type) {
+    case "ADD_FAVORITO":
       return {
         ...store,
-        todos: store.todos.map((todo) => (todo.id === id ? { ...todo, background: color } : todo))
+        favoritos: [...store.favoritos, action.payload],
       };
+
+    case "REMOVE_FAVORITO":
+      return {
+        ...store,
+        favoritos: store.favoritos.filter((fav) => fav.uid !== action.payload.uid),
+      };
+
+    case "LOAD_FAVORITOS":  // Carga los favoritos guardados en localStorage
+      return {
+        ...store,
+        favoritos: action.payload || [],
+      };
+
     default:
-      throw Error('Unknown action.');
-  }    
+      throw new Error("Unknown action.");
+  }
 }
